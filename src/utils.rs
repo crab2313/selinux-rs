@@ -1,32 +1,21 @@
 use selinux_sys;
 
-pub fn enabled() -> Option<bool> {
+pub fn enabled() -> bool {
     match unsafe { selinux_sys::is_selinux_enabled() } {
-        0 => Some(false),
-        1 => Some(true),
-        _ => None,
+        1 => true,
+        ret => {
+            debug_assert_eq!(ret, 0);
+            false
+        },
     }
 }
 
-pub fn mls_enabled() -> Option<bool> {
+pub fn mls_enabled() -> bool {
     match unsafe { selinux_sys::is_selinux_mls_enabled() } {
-        0 => Some(false),
-        1 => Some(true),
-        _ => None,
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_enabled() {
-        assert!(enabled().is_some());
-    }
-
-    #[test]
-    fn test_mls_enabled() {
-        assert!(mls_enabled().is_some());
+        1 => true,
+        ret => {
+            debug_assert_eq!(ret, 0);
+            false
+        },
     }
 }

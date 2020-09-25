@@ -277,7 +277,7 @@ mod tests {
 
     #[test]
     fn context_retrieve() {
-        if crate::enabled().unwrap() {
+        if crate::enabled() {
             Context::current().unwrap();
         }
     }
